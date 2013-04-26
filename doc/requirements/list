@@ -1,0 +1,28 @@
+Functional Requirements
+
+    Applications Management
+        Launch, Kill, List, append, remove applications
+        Window Management
+        System daemons and “user jobs” management. The user jobs are the tasks that the system perform in background, such as file copy, downloads, software updates, and others.
+
+    Data management
+        Local and remote file management.
+        Simplified data management. The simplification consist in allow to store and retrieve files by its meta-data, to have an idea you can see the “Libraries” in the “Windows Explorer”.
+        Security management.
+            Users administration.
+            Credentials management.
+                PGP system integration.
+                Secure user and password storage. (Keys ring)
+            LDAP and Active Directory integration. (Specific requirement of Nova)
+            Privileges escalation. (gksu alike)
+            Environment administration. (Desktop wide configurations)
+        Support of applications specific configurations. (gsettings alike or something more efficient)
+        Look and feel management.
+        User experience support. (full help!)
+
+    Hardware management:
+        Fixed and portable storage devices management.
+        Processor and RAM usage report.
+        Keyboard, mouse, screen, and other devices management.
+        Power management.
+
