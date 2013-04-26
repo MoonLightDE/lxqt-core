@@ -1,4 +1,4 @@
 LDE
 ===
 
-This is a proposal of lightweoght desktop enviroment.
+This is a proposal of lightweight desktop environment.
