@@ -1,0 +1,7 @@
+[Desktop Entry]
+Lib=lib${MODULE}.so
+Class=${MODULE}
+
+Name=Default Module
+Comment=Sample module without an special purpose.
+Icon=

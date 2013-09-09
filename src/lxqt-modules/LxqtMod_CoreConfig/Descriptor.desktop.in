@@ -1,0 +1,7 @@
+[Desktop Entry]
+Lib=lib${MODULE}.so
+Class=${MODULE}
+
+Name=Core Config
+Comment=Lxqt-core configuration module.
+Icon=

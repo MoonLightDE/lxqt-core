@@ -1,0 +1,3 @@
+This folder contains the diferent modules of the desktop.
+
+The "default" module is an skeleton of a module use it to create new modules.
