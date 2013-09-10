@@ -54,7 +54,7 @@ private slots:
 
 private:
     QMap<QString, ModuleDescriptor*> m_ItemMap;
-    QMap<QString, bool> m_StateMap;
+    QMap<QString, bool> m_stateMap;
     QStringList m_KeyList;
     Core* m_core;
 };

@@ -45,25 +45,24 @@ ModuleModel::~ModuleModel() {
 
 void ModuleModel::reset() {
     m_KeyList.clear();
-    m_StateMap.clear();
+    m_stateMap.clear();
 
     foreach(ModuleDescriptor * mod, m_ItemMap.values()) {
         delete mod;
     }
     m_ItemMap.clear();
-    
-    m_ItemMap = m_core->getModuleList();
+
+    m_ItemMap = m_core->getAllDescriptors();
     // Hide config from list
     m_ItemMap.remove("LxqtMod_CoreConfig");
 
     m_KeyList = m_ItemMap.keys();
 
-    QStringList moduleList = m_core->getActiveModuleClassNames();
+    QStringList moduleList = m_core->getActiveModulesNames();
 
     foreach(const QString& moduleName, moduleList) {
         if (m_ItemMap.contains(moduleName)) {
-            m_StateMap[moduleName] = true;
-            m_ItemMap[moduleName]->setEnabled(QBool(TRUE));
+            m_stateMap[moduleName] = true;
         }
     }
 }
@@ -75,12 +74,12 @@ QVariant ModuleModel::data(const QModelIndex& index, int role) const {
             case Qt::DisplayRole:
                 return m_ItemMap[name]->getName();
             case Qt::CheckStateRole:
-                return m_ItemMap[name]->isEnabled() ? Qt::Checked : Qt::Unchecked;
+                return m_stateMap[name] ? Qt::Checked : Qt::Unchecked;
             case Qt::ToolTipRole:
                 return m_ItemMap[name]->getDescription();
         }
     } else if (index.column() == 1 && (role == Qt::DisplayRole || role == Qt::DecorationRole)) {
-        if (role == Qt::DisplayRole && m_StateMap[name] == true)
+        if (role == Qt::DisplayRole && m_stateMap[name] == true)
             return tr("Running") + " ";
     }
     return QVariant();
@@ -89,7 +88,7 @@ QVariant ModuleModel::data(const QModelIndex& index, int role) const {
 bool ModuleModel::setData(const QModelIndex& index, const QVariant& value, int role) {
     if (role == Qt::CheckStateRole) {
         QString key = m_KeyList.at(index.row());
-        m_ItemMap[key]->setEnabled(QBool(value == Qt::Checked));
+        m_stateMap[key] = (value == Qt::Checked);
         emit dataChanged(index, index);
         return true;
     }
@@ -107,15 +106,17 @@ int ModuleModel::rowCount(const QModelIndex& parent) const {
 }
 
 void ModuleModel::writeChanges() {
-
-    foreach(const QString& key, m_KeyList) {
-        m_ItemMap[key]->commit();
+    QStringList startUp;
+    foreach(const QString &key, m_stateMap.keys()) {
+        if (m_stateMap[key])
+            startUp.append(key);
     }
+    m_core->setStartUpModules(startUp);
 }
 
 void ModuleModel::updateModuleState(QString moduleName, bool state) {
     if (m_ItemMap.contains(moduleName)) {
-        m_StateMap[moduleName] = state;
+        m_stateMap[moduleName] = state;
         QModelIndex i = index(m_KeyList.indexOf(moduleName), 1);
         emit dataChanged(i, i);
     }
@@ -125,12 +126,12 @@ void ModuleModel::toggleModule(const QModelIndex &index, bool status) {
     if (!index.isValid())
         return;
 
-    QStringList activeModules = m_core->getActiveModuleClassNames();
+    QStringList activeModules = m_core->getActiveModulesNames();
     LxqtModuleInterface *mod = 0;
     if (activeModules.contains(m_KeyList.at(index.row())))
         m_core->unloadModule(m_KeyList.at(index.row()));
     else
-        mod = m_core->loadModuleByClassName(m_KeyList.at(index.row()));
+        mod = m_core->loadModule(m_KeyList.at(index.row()));
 
     if (mod) {
         mod->setParent(m_core);
