@@ -14,7 +14,6 @@
 /* Description: This class holds the information of a module.
  *      This information is loaded from the .desktop files 
  *      that describes each module.
- *      
  */
 class ModuleDescriptor {
 public:
@@ -22,8 +21,7 @@ public:
     ModuleDescriptor();
     // Load a descriptor from file
     ModuleDescriptor(QString path);
-
-    //void save(QString path) const;
+    
     virtual ~ModuleDescriptor();
 
     
@@ -36,21 +34,13 @@ public:
     // Returns a long description of the module
     QString getDescription() const;
 
-    QBool isEnabled() const;
 
     void setDescription(QString description);
     void setIconPath(QString iconPath);
     void setName(QString name);
     void setLibName(QString path);
     void setClass(QString className);
-
-    void setEnabled(QBool enabled);
-
-    /* Description: Enable or disable the execution
-     *  of the module at startup atending to the value
-     *  of m_enabled. 
-     */
-    void commit() const;
+    
 
 private:
     QString m_class;
@@ -58,7 +48,6 @@ private:
     QString m_description;
     QString m_iconPath;
     QString m_libName;
-    QBool m_enabled;
 
 };
 

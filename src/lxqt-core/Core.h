@@ -25,30 +25,43 @@ class ModuleFactory;
 class Core : public QObject {
 public:
     Core(RazorApplication* app);
-    Core(const Core& orig);
     void init();
 
-    LxqtModuleInterface* loadModuleByLibName(QString libName);
-    LxqtModuleInterface* loadModuleByClassName(QString className);
-    
-    LxqtModuleInterface* getModuleByClassName(QString className) const;
-    
-    QStringList getActiveModuleClassNames() const;
-    QMap<QString, ModuleDescriptor*> getModuleList() const;
-    RazorApplication* getRazorApp() const;
-    
-public slots:
-    /* Description: Unload a module. 
-     * Returns:
+    /*Description: Returns a Module if it's loaded.   */
+    LxqtModuleInterface* getActiveModule(QString className) const;
+
+    QStringList getActiveModulesNames() const;
+
+    /* Description: Finds the descriptors of the installed modules.
+     * Returns: Mpdule descriptors maped by its className.
      */
+    QMap<QString, ModuleDescriptor*> getAllDescriptors() const;
+    ModuleDescriptor* getDescriptor(QString className) const;
+    RazorApplication* getRazorApp() const;
+
+    /* Description: Find the classNames of the modules that are
+     *          loaded on startup.
+     * Returns: List of startup modules classNames.
+     */
+    QStringList getStartUpModules();
+
+    QSettings* getGlobalSettings() const;
+    virtual ~Core();
+
+public slots:
+    void setStartUpModules(QStringList startUpModules);
+
+    // TODO: Implement reference count
+    LxqtModuleInterface* loadModule(QString className);
     void unloadModule(QString className);
 
-    virtual ~Core();
+    void setLoadOnStartUp(QString className);
+    void unsetLoadOnStartUp(QString className);
 private:
     RazorApplication* m_app;
     QSettings* m_settings;
     ModuleFactory* m_moduleFactory;
-    
+
 };
 
 #endif	/* CORE_H */

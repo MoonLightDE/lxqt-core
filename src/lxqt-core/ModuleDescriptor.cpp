@@ -13,14 +13,14 @@
 #include <qtxdg/xdgdirs.h>
 #include <QDebug>
 
-ModuleDescriptor::ModuleDescriptor() : m_enabled(FALSE) {
+ModuleDescriptor::ModuleDescriptor() {
 }
 
-ModuleDescriptor::ModuleDescriptor(QString path) : m_enabled(FALSE) {
+ModuleDescriptor::ModuleDescriptor(QString path)  {
     if (QFile::exists(path)) {
         QSettings settings(path, QSettings::IniFormat);
 
-        settings.beginGroup("Desktop Entry");
+        settings.beginGroup("LXQT-CORE MODULE Entry");
 
         m_class = settings.value("Class").toString();
         m_libName = settings.value("Lib").toString();
@@ -76,24 +76,4 @@ void ModuleDescriptor::setLibName(QString path) {
     this->m_libName = path;
 }
 
-QBool ModuleDescriptor::isEnabled() const {
-    return m_enabled;
-}
 
-void ModuleDescriptor::setEnabled(QBool enabled) {
-    this->m_enabled = enabled;
-}
-
-void ModuleDescriptor::commit() const {
-    QString path = XdgDirs::configHome();
-    QString fName = this->m_class + ".desktop";
-    path += "/lxqt/core/" + fName;
-    qDebug() << path;
-    qDebug() << fName;
-    if (m_enabled)
-        QFile::copy("/usr/local/share/lxqt-core/descriptors/" + fName, path);
-    else
-        QFile::remove(path);
-
-
-}
