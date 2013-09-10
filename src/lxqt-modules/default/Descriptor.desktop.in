@@ -1,4 +1,4 @@
-[Desktop Entry]
+[LXQT-CORE MODULE Entry]
 Lib=lib${MODULE}.so
 Class=${MODULE}
 
